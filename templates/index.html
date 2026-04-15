@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="max-w-5xl mx-auto w-full px-6">
+    <!-- Brand Header -->
+    <header class="text-center mb-10">
+        <h1 class="text-4xl font-light tracking-tight text-slate-800">
+            Linguist<span class="font-semibold text-indigo-600">AI</span>
+        </h1>
+        <p class="text-slate-500 mt-2">Matn tahlili va tarjimasi uchun professional platforma</p>
+    </header>
+
+    <!-- Main Container -->
+    <form method="POST" action="." class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        {% csrf_token %}
+        
+        <!-- Input Block -->
+        <div class="space-y-4">
+            <div class="flex items-center justify-between">
+                <span class="text-xs font-bold uppercase tracking-widest text-slate-400">Kiruvchi ma'lumot</span>
+                <span class="text-xs text-slate-400">Sinxron rejim</span>
+            </div>
+            
+            <div class="relative group">
+                <textarea 
+                    name="user_text" 
+                    rows="12" 
+                    required
+                    class="w-full p-6 bg-white border border-slate-200 rounded-2xl shadow-sm focus:ring-4 focus:ring-indigo-100 focus:border-indigo-400 outline-none transition-all resize-none text-slate-700 leading-relaxed"
+                    placeholder="Matnni bu yerga yozing yoki nusxalang...">{{ original_text }}</textarea>
+            </div>
+
+
+            <div class="flex flex-col space-y-2">
+                <label for="language" class="text-xs font-bold uppercase text-slate-400">Target language</label>
+                <select name="target_lang" id="language" class="w-full p-3 bg-white border border-slate-200 rounded-xl shadow-sm focus:ring-4 focus:ring-indigo-100 outline-none">
+                    <option value="en">Ingliz tili</option>
+                    <option value="uz">Uzbek tili</option>
+                    <option value="ru">Rus tili</option>
+                    <option value="tr">Turk tili</option>
+                    <option value="de">Nemis tili</option>
+                </select>
+            </div>
+
+
+            <!-- Action Buttons -->
+            <div class="grid grid-cols-2 gap-4">
+                <button 
+                    type="submit" 
+                    name="action" 
+                    value="translate"
+                    class="group flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-4 rounded-xl transition-all shadow-lg shadow-indigo-100 active:transform active:scale-[0.98]">
+                    <span>Tarjima qilish</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 opacity-70 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                    </svg>
+                </button>
+                
+                <button 
+                    type="submit" 
+                    name="action" 
+                    value="summarize"
+                    class="bg-slate-800 hover:bg-black text-white font-medium py-4 rounded-xl transition-all shadow-lg shadow-slate-200 active:transform active:scale-[0.98]">
+                    Qisqacha mazmun
+                </button>
+            </div>
+        </div>
+
+        <!-- Output Block -->
+        <div class="space-y-4 flex flex-col">
+            <div class="flex items-center justify-between">
+                <span class="text-xs font-bold uppercase tracking-widest text-slate-400">Natija</span>
+                {% if result %}
+                    <span class="flex h-2 w-2 rounded-full bg-green-500"></span>
+                {% endif %}
+            </div>
+
+            <div class="flex-1 p-6 bg-white border border-slate-200 rounded-2xl shadow-sm min-h-[300px] relative overflow-hidden">
+                {% if result %}
+                    <div class="text-slate-700 leading-relaxed animate-in fade-in duration-500">
+                        {{ result }}
+                    </div>
+                {% else %}
+                    <div class="h-full flex flex-col items-center justify-center text-slate-400">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mb-3 opacity-20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                        </svg>
+                        <p class="text-sm italic text-center px-10">Chap tomondagi maydonga matn kiriting va tugmani bosing.</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </form>
+
+    <!-- Footer Note -->
+    <footer class="mt-16 text-center text-slate-400 text-xs uppercase tracking-widest">
+        Django Proyekt &copy; 2024 • Minimalist Edition
+    </footer>
+</div>
+{% endblock %}
