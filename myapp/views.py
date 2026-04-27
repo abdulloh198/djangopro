@@ -1,7 +1,6 @@
 from django.shortcuts import render
 from googletrans import Translator
 
-# Sumy kutubxonasi uchun kerakli qismlar
 from sumy.parsers.plaintext import PlaintextParser
 from sumy.nlp.tokenizers import Tokenizer
 from sumy.summarizers.lsa import LsaSummarizer
@@ -36,11 +35,10 @@ def index(request):
 
                 elif action == 'summarize':
                     # Sumy orqali qisqacha mazmun yaratish
-                    # O'zbek tili uchun ham 'english' tokenizeridan foydalanamiz (nuqta va vergulga qarab ajratadi)
                     parser = PlaintextParser.from_string(original_text, Tokenizer("english"))
                     summarizer = LsaSummarizer()
 
-                    # Matndan eng muhim 2 ta gapni tanlab oladi
+                    # Matndan eng muhim 3 ta gapni tanlab oladi
                     summary = summarizer(parser.document, 3)
 
                     result_list = [str(sentence) for sentence in summary]
