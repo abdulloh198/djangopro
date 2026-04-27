@@ -1,2 +1,2 @@
 # djangopro
-It's repository is django project. Prject name is Ai translator
+This site works with AI. It can translate and 
