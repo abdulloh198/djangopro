@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sign up</title>
+    <style>
+        body { font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; background: #f4f4f9; }
+        .card { background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); width: 100%; max-width: 350px; }
+        h2 { text-align: center; color: #333; }
+        form p { margin-bottom: 10px; }
+        input { width: 93%; padding: 10px; margin-top: 5px; border: 1px solid #ddd; border-radius: 4px; }
+        button { width: 100%; padding: 10px; background: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer; margin-top: 10px; }
+        button:hover { background: #218838; }
+        .footer-text { text-align: center; margin-top: 15px; font-size: 0.9em; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h2>Sign up</h2>
+        <form method="post">
+            {% csrf_token %}
+            {% for field in form %}
+
+                <p {{ field.label_tag }}<br>
+                    <div class="au-input au-input-full"> {{field}} </div>
+                        {% if field.help_text %}
+                    <br><small style="color: grey">{{ field.help_text }}</small>
+                    {% endif %}
+
+                    {% for error in field.errors %}
+                        <p style="color: red">{{ error }}</p>
+                    {% endfor %}
+
+                </p>
+                {% endfor %}
+
+                <button type="submit">Create acount</button>
+        </form>
+        <div class="footer-text">
+            Profilingiz bormi? <a href="{% url 'login_page' %}">Kirish</a>
+        </div>
+    </div>
+</body>
+</html>

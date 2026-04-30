@@ -1,10 +1,15 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.urls import reverse_lazy
 from googletrans import Translator
-
 from sumy.parsers.plaintext import PlaintextParser
 from sumy.nlp.tokenizers import Tokenizer
 from sumy.summarizers.lsa import LsaSummarizer
 import nltk
+from django.contrib.auth import login, logout, authenticate
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import UserCreationForm
+from django.views import generic
+
 
 try:
     nltk.data.find('tokenizers/punkt')
@@ -13,7 +18,42 @@ except LookupError:
 
 
 
+def login_decarator(func):
+    return login_required(func, login_url='login_page')
 
+
+@login_decarator
+def logout_page(request):
+    logout(request)
+    return redirect('login_page')
+
+
+def login_page(request):
+    if request.POST:
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(request, password=password, username=username)
+
+        if user is not None:
+            login(request, user)
+            return redirect("home_page")
+
+    return render(request, 'login.html')
+
+
+@login_decarator
+def home_page(request):
+    return render(request, 'index.html')
+
+
+
+class SignUpView(generic.CreateView):
+    form_class = UserCreationForm
+    success_url = reverse_lazy('home_page')
+    template_name = "signup.html"
+
+
+@login_decarator
 def index(request):
     result = None
     original_text = ""
