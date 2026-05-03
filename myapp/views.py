@@ -9,6 +9,7 @@ from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 from django.views import generic
+from myapp.models import *
 
 
 try:
@@ -84,6 +85,15 @@ def index(request):
                     result_list = [str(sentence) for sentence in summary]
                     result = " ".join(result_list)
 
+                    user = request.user.username
+                    my_model = history()
+                    my_model.owner = user
+                    my_model.orginal_txt = original_text
+                    my_model.response = result
+
+                    my_model.save()
+
+
                     if not result:
                         result = "Matn juda qisqa, qisqartirish uchun kamida bir necha gap yozing."
 
@@ -96,4 +106,17 @@ def index(request):
         'result': result,
         'original_text': original_text
 
+    })
+
+
+@login_decarator
+def get_history(request):
+    data = history.objects.all()
+
+    history_list = ""
+    for i in data:
+        history_list = f"{i.owner} | {i.orginal_txt[:20]}... | {i.response[:20]}..."
+
+    return render(request, 'history.html', {
+        'history_list': history_list
     })
